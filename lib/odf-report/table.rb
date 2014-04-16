@@ -54,16 +54,17 @@ class Table
     @header = table.xpath("table:table-header-rows").empty? ? @header : false
 
     @collection.each do |data_item|
+      empty = @fields.all? { |i| i.get_value(data_item).empty? }
 
       new_node = get_next_row
 
       replace_fields!(new_node, data_item)
 
       @tables.each do |t|
-        t.replace!(new_node, data_item)
+        t.replace!(new_node, data_item) unless empty
       end
 
-      table.add_child(new_node)
+      table.add_child(new_node) unless empty
 
     end
 
