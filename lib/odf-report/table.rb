@@ -1,7 +1,7 @@
 module ODFReport
 
 class Table
-  include Fields, Nested
+  include Nested
 
   attr_accessor :fields, :rows, :name, :collection_field, :data, :header, :parent, :tables
 
@@ -54,17 +54,16 @@ class Table
     @header = table.xpath("table:table-header-rows").empty? ? @header : false
 
     @collection.each do |data_item|
-      empty = @fields.all? { |i| i.get_value(data_item).empty? }
 
       new_node = get_next_row
 
-      replace_fields!(new_node, data_item)
-
       @tables.each do |t|
-        t.replace!(new_node, data_item) unless empty
+        t.replace!(new_node, data_item)
       end
 
-      table.add_child(new_node) unless empty
+      @fields.each { |field| field.replace!(new_node, data_item) }
+
+      table.add_child(new_node)
 
     end
 
