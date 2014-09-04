@@ -35,6 +35,8 @@ class Table
 
     @collection.each do |data_item|
 
+      next if @fields.all? { |i| i.get_value(data_item).empty? }
+
       new_node = get_next_row
 
       @tables.each    { |t| t.replace!(new_node, data_item) }
