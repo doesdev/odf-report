@@ -15,6 +15,7 @@ class Table
     @template_rows = []
     @header           = opts[:header] || false
     @skip_if_empty    = opts[:skip_if_empty] || false
+    @prepend_row    = opts[:prepend_row] || false
   end
 
   def replace!(doc, row = nil)
@@ -25,8 +26,11 @@ class Table
 
     @header = table.xpath("table:table-header-rows").empty? ? @header : false
 
-
     @collection = get_collection_from_item(row, @collection_field) if row
+    if @prepend_row
+      new_coll = {_blank: true}.merge(@collection)
+      @collection = new_coll
+    end
 
     if @skip_if_empty && @collection.empty?
       table.remove
