@@ -35,7 +35,7 @@ class Table
 
     @collection.each do |data_item|
 
-      next if @fields.all? { |i| i.get_value(data_item).empty? }
+      next if @fields.all? { |i| i.get_value(data_item).to_s.empty? }
 
       new_node = get_next_row
 
