@@ -3,6 +3,8 @@ module ODFReport
   class Section
     include Nested
 
+    attr_accessor :collection
+
     def initialize(opts)
       @name             = opts[:name]
       @collection_field = opts[:collection_field]
